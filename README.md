@@ -6,6 +6,8 @@ Pre-Requisite
 For example - E:/logs
 2. The folder should only contain log files as every file and folder present in this folder will be processed.
 3. The log file should contain logs in json formatted shape. One line should contain one Log in JSON format.
+
+
 For use -
 1. Clone the Repository
 2. Do npm install.
