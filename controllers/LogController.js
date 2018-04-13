@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var LogDataModel = mongoose.model("LogDataModel");
+var recordPerPage = require("config").get("RecordPerPage");
 
 module.exports.Save = function(data, logPropertyList){
     return new Promise((resolve,reject)=>{
@@ -18,20 +19,25 @@ module.exports.Save = function(data, logPropertyList){
     })
 }
 
-module.exports.query = function(propertiesList){
+module.exports.query = function(propertiesList,pageNo){
+    var perPage = recordPerPage
+    var page = pageNo || 1
     var findObj = {};
     var propKeys = Object.keys(propertiesList);
     for(var i=0;i<propKeys.length;i++){
         findObj["log." + propKeys[i]] = propertiesList[propKeys[i]];
     }
     return new Promise((resolve,reject)=>{
-        LogDataModel.find(findObj, function(err, list) {
+        LogDataModel.find(findObj).skip((perPage * page) - perPage).limit(perPage).exec(function(err, list) {
             if(err){
                 reject(err);
                 return;
             }
-            resolve(list)  
-        });
+            resolve({
+                logs:list,
+                current:page
+            })  
+        })
     });
 }
 

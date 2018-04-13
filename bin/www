@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('loganalyzer:server');
 var http = require('http');
+var events = require('events');
+var eventEmitter = require("../pubshub").pubsub;
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +22,16 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+var io = require('socket.io')(server);
+io.on('connection', function(socket){ 
+  eventEmitter.addListener('socketMsg', function(data){
+    socket.emit('LogParsed')
+  });
+  socket.on('reply', function(){ 
+    eventEmitter.emit('socketReply'); 
+  }); // listen to the event
+});
+
 
 /**
  * Listen on provided port, on all network interfaces.

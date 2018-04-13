@@ -3,10 +3,14 @@ var router = express.Router();
 const Filex= require("../controllers/FileExtractor");
 const PropertyController= require("../controllers/PropertyController");
 const LogController= require("../controllers/LogController");
+var events = require('events');
+var eventEmitter = require("../pubshub").pubsub;
 
 router.post('/processlogs', function(req, res, next) {
   if(req.body.path){
     Filex.getFileList(req.body.path).then(()=>{
+      console.log("Sending event now to socket");
+      eventEmitter.emit('socketMsg'); 
     }).catch((err)=>{
     });
     res.send({"success":true});
@@ -17,7 +21,7 @@ router.post('/processlogs', function(req, res, next) {
 
 router.post('/getLogs', function(req, res, next) {
   if(req.body.propertiesList){
-    LogController.query(req.body.propertiesList).then((list)=>{
+    LogController.query(req.body.propertiesList,req.body.page).then((list)=>{
       res.send(list);
     }).catch((err)=>{
       console.log(err);

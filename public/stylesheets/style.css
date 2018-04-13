@@ -77,3 +77,6 @@ div.convert-left {
   height:85%;
   margin-top:15%;
 }
+#notification{
+  display:none;
+}

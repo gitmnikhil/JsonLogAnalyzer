@@ -10,5 +10,6 @@
         "zip",
         "gz",
         "rar"
-    ]
+    ],
+    "RecordPerPage":50
 }
