@@ -1,13 +1,10 @@
 const fs = require('fs');
 var mongoose = require('mongoose');
 const glob = require('glob');
-const unzip = require('unzip');
-const ZipFileExtList = require("config").get("CompressedFileExt");
 const ReadFile = require("./ReadFile");
 const PropertyController = require("./PropertyController");
-const dbConfig = require('config').get('DB');
 
-module.exports.getFileList = function(folderPath){
+module.exports.extractLogs= function(folderPath){
     return new Promise((resolve,reject)=>{
         let logPropertyList = [];
         try{

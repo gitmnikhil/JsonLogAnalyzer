@@ -1,13 +1,17 @@
 var fieldType = []
-$.ajax({
-    url: "/properties",
-    dataType:"json",
-    method:"GET"
-}).done(function(data) {
-    for(let i=0;i<data.length;i++){
-        fieldType.push(data[i].name);
-    }
-});
+function loadPropertiesList(){
+    $.ajax({
+        url: "/properties",
+        dataType:"json",
+        method:"GET"
+    }).done(function(data) {
+        fieldType = [];
+        for(let i=0;i<data.length;i++){
+            fieldType.push(data[i].name);
+        }
+    });
+}
+loadPropertiesList();
 var propertiesList = {}
 function removeElement(event){
     event.parentNode.parentNode.removeChild(event.parentNode);
@@ -22,6 +26,7 @@ window.onload = function(){
         $("#notification").addClass("alert-info");
         $("#notification").removeClass("alert-danger");
         $("#notification").html("Log Parsing has been completed.");
+        loadPropertiesList();
         setTimeout(function(){
             $("#notification").hide();
         },60000);
@@ -89,7 +94,7 @@ window.onload = function(){
     function getResult(pageNo){
         LoadingCurtain(true);
         $.ajax({
-            url: "/getLogs",
+            url: "/logs",
             contentType:"application/json",
             dataType:"json",
             method:"POST",

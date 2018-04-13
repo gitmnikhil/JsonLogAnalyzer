@@ -2,14 +2,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var LogDataModel = mongoose.model("LogDataModel");
 var recordPerPage = require("config").get("RecordPerPage");
-
 module.exports.Save = function(data, logPropertyList){
     return new Promise((resolve,reject)=>{
         try{
             let obj = JSON.parse(data);
             let modelIns = new LogDataModel();
             modelIns.log = obj;
-            saveProperty(obj, logPropertyList);
+            savePropertyToArray(obj, logPropertyList);
             modelIns.save(function(err){
                 resolve();
             });
@@ -41,7 +40,7 @@ module.exports.query = function(propertiesList,pageNo){
     });
 }
 
-function saveProperty(obj, logPropertyList){
+function savePropertyToArray(obj, logPropertyList){
     let objKeys = Object.keys(obj);
     for(var i=0;i<objKeys.length;i++){
         if(logPropertyList.indexOf(objKeys[i])< 0){
