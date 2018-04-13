@@ -1,0 +1,14 @@
+{
+    "DB": {
+        "host": "127.0.0.1",
+        "port": 27017,
+        "dbName": "newDB",
+        "username":"nikhil",
+        "password":"passw0rd"
+    },
+    "CompressedFileExt":[
+        "zip",
+        "gz",
+        "rar"
+    ]
+}
