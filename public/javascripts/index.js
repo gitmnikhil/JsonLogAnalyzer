@@ -68,6 +68,11 @@ window.onload = function(){
             <div class="col">
                 <input type="text" class="form-control filterInputPropValue" name="fieldType" placeholder="Property Value">
             </div>
+            <div class="input-group-append">
+                <div class="input-group-text">
+                <input type="checkbox" class="propIsRegex" aria-label="Is Regex" title="Is Regular Expression">
+                </div>
+            </div>
             <button type="button" onclick="javascript:removeElement(this)" class="btn btn-dark">Remove</button>
         </div>
         `)
@@ -78,7 +83,11 @@ window.onload = function(){
         for(var i=0;i<properties.length;i++){
             var propName = properties.eq(i).find(".filterInputProp option:selected").text();
             var propValue = properties.eq(i).find(".filterInputPropValue").val();
-            propertiesList[propName] = propValue;
+            propertiesList[propName] = {
+                key: propName,
+                value: propValue,
+                IsRegex: properties.eq(i).find(".propIsRegex").is(":checked")
+            }
         }
         getResult(0);
     })

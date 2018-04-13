@@ -24,8 +24,14 @@ module.exports.query = function(propertiesList,pageNo){
     var findObj = {};
     var propKeys = Object.keys(propertiesList);
     for(var i=0;i<propKeys.length;i++){
-        findObj["log." + propKeys[i]] = propertiesList[propKeys[i]];
+        if(propertiesList[propKeys[i]].IsRegex){
+            findObj["log." + propKeys[i]] = {$regex : propertiesList[propKeys[i]].value};
+        }else{
+            findObj["log." + propKeys[i]] = propertiesList[propKeys[i]].value;
+        }
+
     }
+    console.log(findObj);
     return new Promise((resolve,reject)=>{
         LogDataModel.find(findObj).skip((perPage * page) - perPage).limit(perPage).exec(function(err, list) {
             if(err){
