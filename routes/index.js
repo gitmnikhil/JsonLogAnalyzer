@@ -11,6 +11,7 @@ router.post('/processlogs', function(req, res, next) {
     LogExtractor.extractLogs(req.body.path).then(()=>{
       eventEmitter.emit('socketMsg'); 
     }).catch((err)=>{
+      eventEmitter.emit('socketMsg'); 
     });
     res.send({"success":true});
   }else{

@@ -1,7 +1,7 @@
 const fs = require('fs');
 var mongoose = require('mongoose');
 const glob = require('glob');
-const ReadFile = require("./ReadFile");
+const FileReader = require("./FileReader");
 const PropertyController = require("./PropertyController");
 
 module.exports.extractLogs= function(folderPath){
@@ -9,17 +9,32 @@ module.exports.extractLogs= function(folderPath){
         let logPropertyList = [];
         try{
             try{
+                /**
+                 * Drop the Table as previous logs are not relevant
+                 */
                 mongoose.connection.collections["logdatamodels"].drop( function(err) {
                     console.log('collection dropped');
                 });
+            }catch(err){
+                console.log(err);
+            }
+            try{
                 mongoose.connection.collections["propertymodels"].drop( function(err) {
                     console.log('collection dropped');
                 });
             }catch(err){
                 console.log(err);
             }
+            /**
+             * Get the file list in the specified folder.
+             */
             glob(folderPath + '/**/*',function(err,res){
-                function processNextFile(index,){
+                /**
+                 * Process the file by reading it line by line.
+                 * And then save the record in database.
+                 * @param {index of the file present in fileList} index 
+                 */
+                function processNextFile(index){
                     if(index >= res.length){
                         PropertyController.Save(logPropertyList);
                         resolve();
@@ -27,7 +42,7 @@ module.exports.extractLogs= function(folderPath){
                     }
                     let filePath = res[index];
                     if(!fs.lstatSync(filePath).isDirectory()){
-                        ReadFile.ProcessFile(filePath, logPropertyList).then(function(){
+                        FileReader.process(filePath, logPropertyList).then(function(){
                             processNextFile(index + 1)
                         }).catch((exp)=>{
                             processNextFile(index + 1)

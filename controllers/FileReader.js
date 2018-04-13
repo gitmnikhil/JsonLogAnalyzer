@@ -4,7 +4,7 @@ var fs = require('fs')
 
 var lineNr = 0;
 
-module.exports.ProcessFile = function(filePath, logPropertyList){
+module.exports.process = function(filePath, logPropertyList){
     return new Promise((resolve,reject)=>{
         try{
             var s = fs.createReadStream(filePath).pipe(es.split()).pipe(es.mapSync(function(line){
