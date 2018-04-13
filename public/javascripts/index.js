@@ -129,6 +129,11 @@ function CreateTableFromJSON(jsonData,pageno) {
     var table = document.createElement("table");
 
     table.id = "filteredResult";
+    table.classList.add("table");
+    table.classList.add("table-striped");
+    table.classList.add("table-hover");
+    table.classList.add("table-bordered");
+    
     // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
 
     var tr = table.createTHead();                   // TABLE ROW.
@@ -147,6 +152,9 @@ function CreateTableFromJSON(jsonData,pageno) {
     for (var i = 0; i < jsonData.length; i++) {
 
         tr = table.insertRow(-1);
+        if(jsonData[i].log.level === "error"){
+            tr.classList.add("table-danger");
+        }
 
         var tabCell = tr.insertCell(-1);
         tabCell.innerHTML = ((pageno - 1) * 50) + i + 1;
